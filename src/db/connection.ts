@@ -1,9 +1,9 @@
-import { MongoClient } from 'mongodb';
+import { MongoClient, Db } from 'mongodb';
 import config from './db_config';
 
 let _mongodbClient: MongoClient;
 
-const getConnection = async (): Promise<MongoClient> => {
+export const getConnection = async (): Promise<MongoClient> => {
   if (_mongodbClient) {
     return _mongodbClient;
   }
@@ -15,4 +15,6 @@ const getConnection = async (): Promise<MongoClient> => {
   return _mongodbClient;
 };
 
-export default getConnection;
+export const getDB = async (DBName: string): Promise<Db> => {
+  return (await getConnection()).db(DBName);
+};

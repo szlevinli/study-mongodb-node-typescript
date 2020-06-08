@@ -1,26 +1,21 @@
-import { MongoClient, InsertOneWriteOpResult, WithId } from 'mongodb';
+import {
+  InsertOneWriteOpResult,
+  InsertWriteOpResult,
+  WithId,
+  Db,
+} from 'mongodb';
+import { InventoryType } from './data/inventoryData';
 
-export type ListingType = {
-  name: {
-    firstName: string;
-    lastName: string;
-  };
-  age: number;
-  addr: string;
-  createDate: Date;
+export const insertOneToInventory = async (
+  db: Db,
+  data: InventoryType
+): Promise<InsertOneWriteOpResult<WithId<InventoryType>>> => {
+  return await db.collection('inventory').insertOne(data);
 };
 
-export const createOneListing = async (
-  client: MongoClient,
-  newListing: ListingType,
-  dbName = 'example'
-): Promise<InsertOneWriteOpResult<WithId<ListingType>>> => {
-  const result = await client
-    .db(dbName)
-    .collection('list')
-    .insertOne(newListing);
-  console.log(
-    `insertOne return object is \n ${JSON.stringify(result, null, 2)}`
-  );
-  return result;
+export const insertManyToInventory = async (
+  db: Db,
+  data: InventoryType[]
+): Promise<InsertWriteOpResult<WithId<InventoryType>>> => {
+  return await db.collection('inventory').insertMany(data);
 };
